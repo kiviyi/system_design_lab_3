@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: fitness-tracker-postgres
+    environment:
+      POSTGRES_DB: fitness_tracker
+      POSTGRES_USER: fitness_user
+      POSTGRES_PASSWORD: fitness_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+      - ./db/indexes.sql:/docker-entrypoint-initdb.d/03_indexes.sql:ro
+    restart: unless-stopped
+
+  fitness-tracker-api:
+    build: .
+    container_name: fitness-tracker-api
+    environment:
+      DATABASE_URL: postgresql+psycopg://fitness_user:fitness_password@postgres:5432/fitness_tracker
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
