@@ -54,10 +54,10 @@ python main.py
 
 Файлы для домашнего задания лежат в каталоге [`db`](./db):
 
-- [`db/schema.sql`](./db/schema.sql) — схема БД и ограничения
-- [`db/seed.sql`](./db/seed.sql) — тестовые данные
-- [`db/indexes.sql`](./db/indexes.sql) — индексы и краткие пояснения
-- [`db/optimization.sql`](./db/optimization.sql) — запросы для анализа и оптимизации
+- [`schema.sql`](./schema.sql) — схема БД и ограничения
+- [`seed.sql`](./seed.sql) — тестовые данные
+- [`indexes.sql`](./indexes.sql) — индексы и краткие пояснения
+- [`optimization.sql`](./optimization.sql) — запросы для анализа и оптимизации
 
 ## API Endpoints
 
