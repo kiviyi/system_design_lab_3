@@ -16,10 +16,8 @@ services:
   fitness-tracker-api:
     build: .
     container_name: fitness-tracker-api
-    environment:
-      DATABASE_URL: postgresql+psycopg://fitness_user:fitness_password@postgres:5432/fitness_tracker
     ports:
-      - "8000:8000"
+      - "8080:8080"
     depends_on:
       - postgres
     restart: unless-stopped

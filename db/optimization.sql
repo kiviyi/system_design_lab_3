@@ -1,24 +1,17 @@
+-- Для проверки "до оптимизации" выполняйте запросы на схеме без индексов из indexes.sql.
+-- Для проверки "после оптимизации" повторно запускайте те же запросы после создания индексов.
+
 -- 1. История тренировок пользователя за период.
--- До оптимизации:
 EXPLAIN ANALYZE
 SELECT w.id, w.name, w.workout_date
 FROM workouts w
 WHERE w.user_id = '00000000-0000-0000-0000-000000000001'
   AND w.workout_date BETWEEN DATE '2026-01-01' AND DATE '2026-01-31'
 ORDER BY w.workout_date DESC;
-
--- После индекса idx_workouts_user_date запрос использует
--- отбор по user_id и диапазон по workout_date без полного сканирования.
-EXPLAIN ANALYZE
-SELECT w.id, w.name, w.workout_date
-FROM workouts w
-WHERE w.user_id = '00000000-0000-0000-0000-000000000001'
-  AND w.workout_date BETWEEN DATE '2026-01-01' AND DATE '2026-01-31'
-ORDER BY w.workout_date DESC;
-
 
 -- 2. Сводная статистика тренировок пользователя.
--- Переписанный запрос считает агрегаты одной выборкой.
+-- Оптимизация достигается за счет индекса по (user_id, workout_date)
+-- и индекса по workout_id для таблицы workout_exercises.
 EXPLAIN ANALYZE
 SELECT
     w.user_id,
@@ -34,6 +27,7 @@ GROUP BY w.user_id;
 
 
 -- 3. Детализация упражнений внутри тренировки.
+-- Здесь помогает индекс idx_workout_exercises_workout_id.
 EXPLAIN ANALYZE
 SELECT
     we.workout_id,

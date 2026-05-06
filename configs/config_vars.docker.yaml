@@ -1,0 +1,3 @@
+server-port: 8080
+logger-level: info
+postgres-dsn: postgresql://fitness_user:fitness_password@postgres:5432/fitness_tracker
